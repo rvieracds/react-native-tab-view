@@ -206,31 +206,35 @@ export default class TabViewAnimated<T: *> extends React.Component<
     const props = this._buildSceneRendererProps();
 
     return (
-      <View collapsable={false} style={[styles.container, this.props.style]}>
-        {renderHeader && renderHeader(props)}
-        <View onLayout={this._handleLayout} style={styles.pager}>
-          {renderPager({
-            ...props,
-            ...rest,
-            panX: this.state.panX,
-            offsetX: this.state.offsetX,
-            children: navigationState.routes.map((route, index) => {
-              const scene = this._renderScene({
-                ...props,
-                route,
-                index,
-                focused: index === navigationState.index,
-              });
+      <View style={[styles.container, this.props.style]}>
+        <View collapsable={false} style={[styles.container, this.props.style]}>
+          {renderHeader && renderHeader(props)}
+          <View onLayout={this._handleLayout} style={styles.pager}>
+            {renderPager({
+              ...props,
+              ...rest,
+              panX: this.state.panX,
+              offsetX: this.state.offsetX,
+              children: navigationState.routes.map((route, index) => {
+                const scene = this._renderScene({
+                  ...props,
+                  route,
+                  index,
+                  focused: index === navigationState.index,
+                });
 
-              if (scene) {
-                return React.cloneElement(scene, { key: route.key });
-              }
+                if (scene) {
+                  return React.cloneElement(scene, { key: route.key });
+                }
 
-              return scene;
-            }),
-          })}
+                return scene;
+              }),
+            })}
+          </View>
         </View>
-        {renderFooter && renderFooter(props)}
+        <View style={{flex: 1}}>
+          {renderFooter && renderFooter(props)}
+        </View>
       </View>
     );
   }
